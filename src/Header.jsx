@@ -1,9 +1,10 @@
 import React from "react";
+import MyAppBar from "./AppBar";
 
-function Header() {
+function Header(props) {
   return (
     <header>
-      <h1></h1>
+      <MyAppBar isLoggedIn={props.isLoggedIn} />
     </header>
   );
 }

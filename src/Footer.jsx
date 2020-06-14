@@ -1,11 +1,16 @@
 import React from "react";
+import SimpleBreadCrumbs from "./BreadCrumbs"
 
 function Footer() {
-  let year = new Date().getFullYear();
+
+  const style = {
+    display: 'flex',
+    justifyContent: 'center'
+  };
 
   return (
-    <footer>
-      <p>Copyright © {year}</p>
+    <footer style={style}>
+      <SimpleBreadCrumbs />
     </footer>
   );
 }
