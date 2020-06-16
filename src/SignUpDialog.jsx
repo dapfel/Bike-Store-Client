@@ -12,15 +12,15 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function SignUpDialog() {
+export default function SignUpDialog(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  function handleClickOpen() {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
   };
 
@@ -28,7 +28,7 @@ export default function SignUpDialog() {
     <div>
     <Fab color="primary" onClick={handleClickOpen} variant="extended"className={classes.button} >Sign Up</Fab>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <SignUpPage />
+        <SignUpPage onClose={handleClose} />
       </Dialog>
     </div>
   );

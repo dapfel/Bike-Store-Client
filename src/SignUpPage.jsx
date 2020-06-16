@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -44,8 +44,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
+
+  const [signInData, setSignInData] = useState({username: '', password: '', firstName: '', lastName: ''});
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setSignInData(prevValues => {
+      return {
+        ...prevValues,
+        [name]: value
+      };
+    });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const {username, password, firstName, lastName} = signInData;
+    
+    fetch('/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: username, password: password, firstName: firstName, lastName: lastName})
+    })
+    .then(res => {
+        if (res.status === 200) {
+          props.onClose();  
+          alert("Registration Complete, please log in.");
+        }
+        else {
+          props.onClose();  
+          alert("Registration Failed");
+        }
+    });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -57,7 +91,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -68,6 +102,8 @@ export default function SignUp() {
                 fullWidth
                 id="firstName"
                 label="First Name"
+                value={signInData.firstName}
+                onChange={handleChange}
                 autoFocus
               />
             </Grid>
@@ -79,6 +115,8 @@ export default function SignUp() {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
+                value={signInData.lastName}
+                onChange={handleChange}
                 autoComplete="lname"
               />
             </Grid>
@@ -89,7 +127,9 @@ export default function SignUp() {
                 fullWidth
                 id="email"
                 label="Email Address"
-                name="email"
+                name="username"
+                value={signInData.username}
+                onChange={handleChange}
                 autoComplete="email"
               />
             </Grid>
@@ -102,6 +142,8 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                value={signInData.password}
+                onChange={handleChange}
                 autoComplete="current-password"
               />
             </Grid>

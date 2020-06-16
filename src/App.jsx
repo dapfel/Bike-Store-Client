@@ -1,42 +1,55 @@
-import React, { Component } from "react";
+import React, {useState} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import BikesGrid from "./BikesGrid";
-import SignUpDialog from "./SignUpDialog";
-import LoginDialog from "./LoginDialog";
 
-class App extends Component {
-state = {
-    data: null,
-    isLoggedIn: false
-  };
+function App() {
 
-  componentDidMount() {
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.data }))
-      .catch(err => console.log(err));
+  const [displayedBikes, setDisplayedBikes] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [creditCard, setCreditCard] = useState({});
+
+  setLoggedIn = (userData) => {
+    setIsLoggedIn(true); 
+    setCart(userData.userCart);
+    setCreditCard(userData.creditCard);
+  }
+
+  setLoggedOut = () => {
+    setIsLoggedIn(false); 
+    setCart([]);
+    setCreditCard({});
+  }
+
+  setDisplayBikes = (bikesToDisplay) => {
+    setDisplayedBikes(bikesToDisplay);
   }
   
-  callBackendAPI = async () => {
-    const response = await fetch('/bikes');
-    const body = await response.json();
+  function getFeaturedBikes() {
+    const res = await fetch('/bikes/featured');
+    const body = await res.json();
 
-    if (response.status !== 200) {
-      throw Error(body.message) 
+    if (res.status === 200) {
+      setDisplayedBikes(res.body.bikeData);
     }
-    return body;
-  };
+    else {
+      // error message
+    }
+  }
 
-  render() {
     return (
       <div className="App">
-        <Header isLoggedIn={this.state.isLoggedIn} />
+        <Header 
+          onDisplayBikes={setDisplayBikes} 
+          isLoggedIn={isLoggedIn} 
+          onLogin={setLoggedIn} 
+          onLogout={setLoggedOut}/>
         <BikesGrid />
-        <p>{this.state.data}</p>
+        <p>{getFeaturedBikes}</p>
         <Footer />
       </div>
     );
-  }
 }
 
 export default App;

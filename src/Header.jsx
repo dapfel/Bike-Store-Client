@@ -4,7 +4,12 @@ import MyAppBar from "./AppBar";
 function Header(props) {
   return (
     <header>
-      <MyAppBar isLoggedIn={props.isLoggedIn} />
+      <MyAppBar 
+        onDisplayBikes={props.onDisplayBikes} 
+        isLoggedIn={props.isLoggedIn} 
+        onLogin={props.onLogin} 
+        onLogout={props.onLogout}
+      />
     </header>
   );
 }

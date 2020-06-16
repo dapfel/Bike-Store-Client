@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -45,8 +45,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function Login(props) {
   const classes = useStyles();
+
+  const [loginData, setLoginData] = useState({username: '', password: ''});
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setLoginData(prevValues => {
+      return {
+        ...prevValues,
+        [name]: value
+      };
+    });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const {username, password} = loginData;
+    
+    fetch('/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    })
+    .then(res => {
+        if (res.status === 200) {
+          const userData = res.body;
+          props.onLogin(userData);
+          props.onClose();  
+        }
+        else {
+          props.onClose();  
+        }
+    });
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -58,7 +92,7 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit} >
           <TextField
             variant="outlined"
             margin="normal"
@@ -66,7 +100,9 @@ export default function Login() {
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
+            name="username"
+            value={loginData.username}
+            onChange={handleChange}
             autoComplete="email"
             autoFocus
           />
@@ -79,6 +115,8 @@ export default function Login() {
             label="Password"
             type="password"
             id="password"
+            value={loginData.password}
+            onChange={handleChange}
             autoComplete="current-password"
           />
           <Button

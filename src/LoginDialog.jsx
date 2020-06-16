@@ -11,15 +11,15 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function LoginDialog() {
+export default function LoginDialog(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  function handleClickOpen() {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
   };
 
@@ -27,7 +27,7 @@ export default function LoginDialog() {
     <div>
       <Button color="inherit" onClick={handleClickOpen} className={classes.button}>Login</Button> 
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <LoginPage />
+        <LoginPage onLogin={props.onLogin} onClose={handleClose} />
       </Dialog>
     </div>
   );

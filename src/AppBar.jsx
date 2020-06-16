@@ -9,6 +9,7 @@ import InputBase from '@material-ui/core/InputBase';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import SignUpDialog from "./SignUpDialog";
 import LoginDialog from "./LoginDialog";
+import LogoutButton from "./LogoutButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,17 +65,37 @@ const useStyles = makeStyles((theme) => ({
 export default function MyAppBar(props) {
   const classes = useStyles();
 
+  const [searchInputTerm, setSearchInputTerm] = useState("");
+
+  function handleSearchInputChange(event) {
+    const value = event.target;
+    setSearchInputTerm(value);
+  }
+
+  function handleSearchInputSubmit(event) {
+    const queryParam = "searchTerm=" + searchInputTerm;
+    fetch ("/bikes/search?" + queryParam)
+    .then(res => {
+    if (res.status === 200) {
+      props.onDisplayBikes(res.body.bikeData);
+    }
+    else {
+      // error
+    }});
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             The Bike Store
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
+            <Form onSubmit={handleSearchInputSubmit}>
             <InputBase
               placeholder="Search…"
               classes={{
@@ -82,17 +103,20 @@ export default function MyAppBar(props) {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onChange={handleSearchInputChange}
+              value={searchInputTerm}
             />
+            </Form>
           </div>
           <Button variant="contained" color="secondary" className={classes.button}>
             <ShoppingCartIcon /> 
             Cart
           </Button>
           {props.isLoggedIn ? 
-            <Button color="inherit" className={classes.button}>Log Out</Button> 
+            <LogoutButton onLogout={props.onLogout} /> 
             :
             <Fragment>
-            <LoginDialog />
+            <LoginDialog onLogin={props.onLogin} />
             <SignUpDialog /> 
             </Fragment>
           }
