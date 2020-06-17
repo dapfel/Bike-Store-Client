@@ -1,15 +1,14 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import SignUpDialog from "./SignUpDialog";
 import LoginDialog from "./LoginDialog";
 import LogoutButton from "./LogoutButton";
+import CartDialog from './CartDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,15 +67,16 @@ export default function MyAppBar(props) {
   const [searchInputTerm, setSearchInputTerm] = useState("");
 
   function handleSearchInputChange(event) {
-    const value = event.target;
-    setSearchInputTerm(value);
+    setSearchInputTerm(event.target.value);
   }
 
   function handleSearchInputSubmit(event) {
+    event.preventDefault();
     const queryParam = "searchTerm=" + searchInputTerm;
     fetch ("/bikes/search?" + queryParam)
     .then(res => {
     if (res.status === 200) {
+      props.onSearch();
       props.onDisplayBikes(res.body.bikeData);
     }
     else {
@@ -95,7 +95,7 @@ export default function MyAppBar(props) {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <Form onSubmit={handleSearchInputSubmit}>
+            <form onSubmit={handleSearchInputSubmit}>
             <InputBase
               placeholder="Search…"
               classes={{
@@ -106,12 +106,9 @@ export default function MyAppBar(props) {
               onChange={handleSearchInputChange}
               value={searchInputTerm}
             />
-            </Form>
+            </form>
           </div>
-          <Button variant="contained" color="secondary" className={classes.button}>
-            <ShoppingCartIcon /> 
-            Cart
-          </Button>
+          <CartDialog cart={props.cart} onCheckout={props.onCheckout}/>
           {props.isLoggedIn ? 
             <LogoutButton onLogout={props.onLogout} /> 
             :

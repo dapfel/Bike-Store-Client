@@ -10,8 +10,9 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function BikesGrid() {
+export default function BikesGrid(props) {
     const classes = useStyles();
+    const bikesToDisplay = props.bikesToDisplay;
     
     return (
         <Grid container spacing={3} className={classes.root}>

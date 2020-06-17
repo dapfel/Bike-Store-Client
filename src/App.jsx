@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import BikesGrid from "./BikesGrid";
+import FilterOptionsBar from "./FilterOptionsBar";
+import Checkout from "./Checkout"
+
 
 function App() {
 
@@ -9,45 +12,63 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
   const [creditCard, setCreditCard] = useState({});
+  const [searchCompleted, setSearchCompleted] = useState(false);
+  const [displayCheckoutPage, setDisplayCheckoutPage] = useState(false);
 
-  setLoggedIn = (userData) => {
+  useEffect(() => {
+    fetch('/bikes/featured', (res) => {
+      if (res.status === 200) {
+      setDisplayedBikes(res.body.bikeData);
+    }
+    else {
+      // error message
+    }});
+  });
+
+  const setLoggedIn = (userData) => {
     setIsLoggedIn(true); 
     setCart(userData.userCart);
     setCreditCard(userData.creditCard);
   }
 
-  setLoggedOut = () => {
+  const setLoggedOut = () => {
     setIsLoggedIn(false); 
     setCart([]);
     setCreditCard({});
   }
 
-  setDisplayBikes = (bikesToDisplay) => {
+  const setDisplayBikes = (bikesToDisplay) => {
     setDisplayedBikes(bikesToDisplay);
   }
-  
-  function getFeaturedBikes() {
-    const res = await fetch('/bikes/featured');
-    const body = await res.json();
 
-    if (res.status === 200) {
-      setDisplayedBikes(res.body.bikeData);
-    }
-    else {
-      // error message
-    }
+  const onSearch = () => {
+    setSearchCompleted(true);
+  }
+
+  const onCheckout = () => {
+    setDisplayCheckoutPage(true);
   }
 
     return (
       <div className="App">
-        <Header 
-          onDisplayBikes={setDisplayBikes} 
-          isLoggedIn={isLoggedIn} 
-          onLogin={setLoggedIn} 
-          onLogout={setLoggedOut}/>
-        <BikesGrid />
-        <p>{getFeaturedBikes}</p>
-        <Footer />
+        {displayCheckoutPage ? 
+        <Checkout />
+        :
+        <React.Fragment>
+          <Header 
+            onDisplayBikes={setDisplayBikes} 
+            isLoggedIn={isLoggedIn} 
+            onLogin={setLoggedIn} 
+            onLogout={setLoggedOut}
+            onSearch={onSearch}
+            onCheckout={onCheckout}
+            cart={cart}
+          />
+          {searchCompleted ? <FilterOptionsBar /> : null}
+          <BikesGrid bikesToDisplay={displayedBikes} />
+          <Footer />
+        </React.Fragment>
+        }
       </div>
     );
 }
