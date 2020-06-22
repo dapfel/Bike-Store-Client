@@ -2,25 +2,30 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   root: {
     maxWidth: 500,
-    marginTop: '30px',
-    marginBottom: '30px'
+    marginBottom: '30px',
+    textAlign: 'center'
   },
+  price: {
+    marginTop: '5px'
+  }
 });
 
 export default function BikeCard() {
   const classes = useStyles();
 
+  function handleCardClick(event) {
+
+  }
+
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={handleCardClick}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -36,16 +41,11 @@ export default function BikeCard() {
           <Typography variant="body2" color="textSecondary" component="p">
             This is a a great bike. You should really buy it and have a lot of good times riding around on it.
           </Typography>
+          <Typography className={classes.price}  variant="body1" color="textPrimary" component="p">
+            $450.00
+          </Typography>
         </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
+      </CardActionArea>  
     </Card>
   );
 }

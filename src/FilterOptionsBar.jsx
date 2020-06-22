@@ -1,25 +1,56 @@
-import React from "react";
-import PriceRangeSlider from "./PriceRangeSlider";
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FeaturedCheckbox from "./FeaturedCheckbox";
+import PriceExpansionPanel from './ExpansionPanels/PriceExpansionPanel';
+import GenderExpansionPanel from './ExpansionPanels/GenderExpansionPanel';
+import DiciplineExpansionPanel from './ExpansionPanels/DiciplineExpansionPanel';
+import ElectricExpansionPanel from './ExpansionPanels/ElectricExpansionPanel';
+import WheelSizeExpansionPanel from './ExpansionPanels/WheelSizeExpansionPanel';
+import MaterialExpansionPanel from './ExpansionPanels/MaterialExpansionPanel';
+import ColorExpansionPanel from './ExpansionPanels/ColorExpansionPanel';
+import BrandExpansionPanel from './ExpansionPanels/BrandExpansionPanel';
 
-const useStyles = makeStyles({
-    root: {
-      backgroundColor: "#e6e6e6",
-      marginBottom: "10px",
-      padding: "20px"
-    },
-  });
-
-function FilterOptionsBar() {
-    const classes = useStyles();
-
-    return (
-      <div className={classes.root}>
-        <PriceRangeSlider />
-        <FeaturedCheckbox />
-      </div>
-    );
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginRight: '3px',
+    maxWidth: '350px'
   }
-  
-  export default FilterOptionsBar;
+}));
+
+
+export default function FilterOptionsBar(props) {
+  const classes = useStyles();
+
+  const [filterState, setFilterState] = useState([]);
+
+  function handleSubmitFilter(newFilterOption) {
+    setFilterState([...filterState, newFilterOption]);
+    let queryParams;
+    filterState.forEach((filterOption) => {
+      const {spec, value} = filterOption;
+      if (spec === "priceRange") {
+        queryParams += "priceMin=" + value.min + "&" + "priceMax=" + value.max + "&";
+      } else {
+      queryParams += spec + "=" + value + "&"
+      }
+    });
+    queryParams = queryParams.slice(0,-1);
+    fetch('/bikes/filtered?' + queryParams)
+    .then((res) => res.json())
+    .then((data) => {
+      props.onDisplayBikes(data.bikeData);
+    });
+  }
+
+  return (
+    <div className={classes.root}>
+      <PriceExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <BrandExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <GenderExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <DiciplineExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <ElectricExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <WheelSizeExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <MaterialExpansionPanel onSubmitFilter={handleSubmitFilter} />
+      <ColorExpansionPanel onSubmitFilter={handleSubmitFilter} />
+    </div>
+  );
+}

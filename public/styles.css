@@ -4,8 +4,6 @@ body {
   background-image: url("/images/asfalt-dark.png");
   margin: 0;
 }
-
-footer {
-    background-color: #3f51b5;
-    padding: 30px;
+.MuiFab-label {
+  min-width: 57px
 }

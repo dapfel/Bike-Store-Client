@@ -26,7 +26,7 @@ export default function SignUpDialog(props) {
 
   return (
     <div>
-    <Fab color="primary" onClick={handleClickOpen} variant="extended"className={classes.button} >Sign Up</Fab>
+    <Fab color="primary" onClick={handleClickOpen} variant="extended"className={classes.button} >SIGN UP</Fab>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <SignUpPage onClose={handleClose} />
       </Dialog>

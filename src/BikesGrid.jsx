@@ -4,10 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import BikeCard from "./BikeCard";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      marginTop: '30px',
-      marginBottom: '30px'
-    }
+
   }));
 
 export default function BikesGrid(props) {
@@ -16,40 +13,40 @@ export default function BikesGrid(props) {
     
     return (
         <Grid container spacing={3} className={classes.root}>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} md={3} sm={4}>
               <BikeCard />
           </Grid>  
         </Grid>

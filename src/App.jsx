@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import BikesGrid from "./BikesGrid";
-import FilterOptionsBar from "./FilterOptionsBar";
+import CenterContent from './CenterContent';
 import Checkout from "./Checkout"
 
 
@@ -12,18 +11,15 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
   const [creditCard, setCreditCard] = useState({});
-  const [searchCompleted, setSearchCompleted] = useState(false);
   const [displayCheckoutPage, setDisplayCheckoutPage] = useState(false);
 
   useEffect(() => {
-    fetch('/bikes/featured', (res) => {
-      if (res.status === 200) {
-      setDisplayedBikes(res.body.bikeData);
-    }
-    else {
-      // error message
-    }});
-  });
+    fetch('/bikes/featured')
+    .then((res) => res.json())
+    .then((data) => {
+      setDisplayedBikes(data.bikeData);
+    });
+  }, []);
 
   const setLoggedIn = (userData) => {
     setIsLoggedIn(true); 
@@ -41,10 +37,6 @@ function App() {
     setDisplayedBikes(bikesToDisplay);
   }
 
-  const onSearch = () => {
-    setSearchCompleted(true);
-  }
-
   const onCheckout = () => {
     setDisplayCheckoutPage(true);
   }
@@ -60,12 +52,10 @@ function App() {
             isLoggedIn={isLoggedIn} 
             onLogin={setLoggedIn} 
             onLogout={setLoggedOut}
-            onSearch={onSearch}
             onCheckout={onCheckout}
             cart={cart}
           />
-          {searchCompleted ? <FilterOptionsBar /> : null}
-          <BikesGrid bikesToDisplay={displayedBikes} />
+          <CenterContent bikesToDisplay={displayedBikes} onDisplayBikes={setDisplayBikes} />
           <Footer />
         </React.Fragment>
         }

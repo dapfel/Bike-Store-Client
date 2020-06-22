@@ -9,7 +9,6 @@ function Header(props) {
         isLoggedIn={props.isLoggedIn} 
         onLogin={props.onLogin} 
         onLogout={props.onLogout}
-        onSearch={props.onSearch}
         onCheckout={props.onCheckout}
         cart={props.cart}
       />

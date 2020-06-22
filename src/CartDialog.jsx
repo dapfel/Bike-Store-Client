@@ -3,10 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import CartPage from './CartPage';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MyShoppingCartIcon from './MyShoppingCartIcon';
 
 const useStyles = makeStyles((theme) => ({
   button: {
+    padding: '3px 8px',
     marginLeft: '6px',
     marginRight: '6px'
   }
@@ -28,8 +29,8 @@ export default function CartDialog(props) {
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen} color="secondary" className={classes.button}>
-        <ShoppingCartIcon /> 
-        Cart
+        <MyShoppingCartIcon /> 
+        CART
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <CartPage cart={props.cart} onCheckout={props.onCheckout} onClose={handleClose} />
