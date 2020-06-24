@@ -23,14 +23,16 @@ export default function FilterOptionsBar(props) {
   const [filterState, setFilterState] = useState([]);
 
   function handleSubmitFilter(newFilterOption) {
-    setFilterState([...filterState, newFilterOption]);
-    let queryParams;
-    filterState.forEach((filterOption) => {
-      const {spec, value} = filterOption;
-      if (spec === "priceRange") {
-        queryParams += "priceMin=" + value.min + "&" + "priceMax=" + value.max + "&";
+    const filter = newFilterState(filterState, newFilterOption);
+    setFilterState(filter);
+    let queryParams = "";
+    filter.forEach((filterOption) => {
+      if (filterOption.spec === "priceRange") {
+        queryParams += "priceMin=" + filterOption.value.min + "&" + "priceMax=" + filterOption.value.max + "&";
       } else {
-      queryParams += spec + "=" + value + "&"
+        if (filterOption.value !== 'Any') {
+          queryParams += filterOption.spec + "=" + filterOption.value + "&"
+        }
       }
     });
     queryParams = queryParams.slice(0,-1);
@@ -53,4 +55,12 @@ export default function FilterOptionsBar(props) {
       <ColorExpansionPanel onSubmitFilter={handleSubmitFilter} />
     </div>
   );
+}
+
+function newFilterState(oldFilter, newFilterOption) {
+  let newFilter = oldFilter.filter((option) => {
+    return option.spec !== newFilterOption.spec;
+  })
+  newFilter.push(newFilterOption);
+  return newFilter;
 }

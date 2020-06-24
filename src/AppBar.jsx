@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { withResizeDetector } from 'react-resize-detector';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import SearchIcon from '@material-ui/icons/Search';
@@ -80,61 +79,45 @@ export default function MyAppBar(props) {
     event.preventDefault();
     const queryParam = "searchTerm=" + searchInputTerm;
     fetch ("/bikes/search?" + queryParam)
-    .then(res => {
-    if (res.status === 200) {
-      props.onDisplayBikes(res.body.bikeData);
-    }
-    else {
-      // error
-    }});
+    .then((res) => res.json())
+    .then((data) => {
+      props.onDisplayBikes(data.bikeData);
+    });
   }
-
-  const AdaptiveComponent = ({ width, height }) => {
-    const [collapseMenu, setCollapseMenu] = useState(false);
-     
-    useEffect(() => {
-    setCollapseMenu(width < 900 ? true : false);
-    }, [width]);
-     
-    return (    
-      <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar className={classes.toolbar}>
-          <img src="images/logo.png" alt="logo" className={classes.logo} />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <form onSubmit={handleSearchInputSubmit}>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={handleSearchInputChange}
-              value={searchInputTerm}
-            />
-            </form>
-          </div>
-          <AdaptiveMenu
-            collapseMenu={collapseMenu}
-            isLoggedIn={props.isLoggedIn}
-            cart={props.cart} 
-            onCheckout={props.onCheckout} 
-            onLogout={props.onLogout} 
-            onLogin={props.onLogin} 
-          />
-        </Toolbar>
-      </AppBar>
-    </div>
-    );
-  }
-
-  const AdaptiveWithDetector = withResizeDetector(AdaptiveComponent);
 
   return (
-    <AdaptiveWithDetector/>
+    <div className={classes.root} key="appbardiv">
+    <AppBar position="static" key="appbar">
+      <Toolbar className={classes.toolbar} key="toolbar">
+        <img src="images/logo.png" alt="logo" className={classes.logo} />
+        <div className={classes.search} key='searchdiv'>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
+          </div>
+          <form onSubmit={handleSearchInputSubmit} key="searchForm">
+          <InputBase
+            key="searchInput"
+            id="searchInput"
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+            inputProps={{ 'aria-label': 'search' }}
+            onChange={handleSearchInputChange}
+            value={searchInputTerm}
+          />
+          </form>
+        </div>
+        <AdaptiveMenu
+          isLoggedIn={props.isLoggedIn}
+          cart={props.cart} 
+          onCheckout={props.onCheckout} 
+          onLogout={props.onLogout} 
+          onLogin={props.onLogin} 
+        />
+      </Toolbar>
+    </AppBar>
+  </div>
   );
 }

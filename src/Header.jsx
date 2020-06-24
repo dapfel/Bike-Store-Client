@@ -3,16 +3,15 @@ import MyAppBar from "./AppBar";
 
 function Header(props) {
   return (
-    <header>
-      <MyAppBar 
-        onDisplayBikes={props.onDisplayBikes} 
-        isLoggedIn={props.isLoggedIn} 
-        onLogin={props.onLogin} 
-        onLogout={props.onLogout}
-        onCheckout={props.onCheckout}
-        cart={props.cart}
-      />
-    </header>
+    <MyAppBar 
+      key="myappbar"
+      onDisplayBikes={props.onDisplayBikes} 
+      isLoggedIn={props.isLoggedIn} 
+      onLogin={props.onLogin} 
+      onLogout={props.onLogout}
+      onCheckout={props.onCheckout}
+      cart={props.cart}
+    />
   );
 }
 

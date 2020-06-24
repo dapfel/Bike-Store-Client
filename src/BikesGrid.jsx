@@ -13,42 +13,11 @@ export default function BikesGrid(props) {
     
     return (
         <Grid container spacing={3} className={classes.root}>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>
-          <Grid item xs={6} md={3} sm={4}>
-              <BikeCard />
-          </Grid>  
+          {bikesToDisplay.map((bikeInfo, index) => { return (
+            <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+                <BikeCard bikeInfo={bikeInfo} />
+            </Grid> 
+          );})} 
         </Grid>
     );
   }

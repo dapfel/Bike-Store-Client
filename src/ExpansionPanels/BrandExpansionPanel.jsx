@@ -65,7 +65,6 @@ export default function BrandExpansionPanel(props) {
   
   const [expanded, setExpanded] = useState(false);
   const [brandList, setBrandList] = useState([]);
-  const [radioState, setRadioState] = useState();
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function BrandExpansionPanel(props) {
     .then((res) => res.json())
     .then((data) => {
       setBrandList(data.specNameList);
-      setRadioState(brandList.map((brandName, index) => {return ({index: index.toString(), checked: false})}));
       setLoadingData(false);
     });
   },[]);
@@ -83,8 +81,7 @@ export default function BrandExpansionPanel(props) {
   };
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({brand: radioState});
+    props.onSubmitFilter({spec: 'brand', value: event.target.value});
   };
 
   return (
@@ -96,7 +93,8 @@ export default function BrandExpansionPanel(props) {
       <ExpansionPanelDetails className={classes.list}>
         {loadingData ? <p>loading data...</p> :
         <FormControl component="fieldset">
-          <RadioGroup aria-label="brand" name="brand" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="brand" name="brand" onChange={handleRadioChange} defaultValue='Any' >
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             {brandList.map((brandName, index) => {return (
               <FormControlLabel value={brandName} control={<Radio />} label={brandName} key={brandName} />
             )})}

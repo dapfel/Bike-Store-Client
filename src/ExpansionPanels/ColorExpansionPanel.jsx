@@ -65,7 +65,6 @@ export default function ColorExpansionPanel(props) {
   
   const [expanded, setExpanded] = useState(false);
   const [colorList, setColorList] = useState([]);
-  const [radioState, setRadioState] = useState();
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function ColorExpansionPanel(props) {
     .then((res) => res.json())
     .then((data) => {
       setColorList(data.specNameList);
-      setRadioState(colorList.map((colorName, index) => {return ({index: index.toString(), checked: false})}));
       setLoadingData(false);
     });
   },[]);
@@ -83,8 +81,7 @@ export default function ColorExpansionPanel(props) {
   };
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({color: radioState});
+    props.onSubmitFilter({spec: 'color', value: event.target.value});
   };
 
   return (
@@ -96,7 +93,8 @@ export default function ColorExpansionPanel(props) {
       <ExpansionPanelDetails className={classes.list}>
         {loadingData ? <p>loading data...</p> :
         <FormControl component="fieldset">
-          <RadioGroup aria-label="color" name="color" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="color" name="color" onChange={handleRadioChange} defaultValue='Any'>
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             {colorList.map((colorName, index) => {return (
               <FormControlLabel value={colorName} control={<Radio />} label={colorName} key={colorName} />
             )})}

@@ -65,7 +65,6 @@ export default function WheelSizeExpansionPanel(props) {
   
   const [expanded, setExpanded] = useState(false);
   const [wheelSizeList, setWheelSizeList] = useState([]);
-  const [radioState, setRadioState] = useState();
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function WheelSizeExpansionPanel(props) {
     .then((res) => res.json())
     .then((data) => {
       setWheelSizeList(data.specNameList);
-      setRadioState(wheelSizeList.map((wheelSizeName, index) => {return ({index: index.toString(), checked: false})}));
       setLoadingData(false);
     });
   },[]);
@@ -83,8 +81,7 @@ export default function WheelSizeExpansionPanel(props) {
   };
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({wheelSize: radioState});
+    props.onSubmitFilter({spec: 'wheelSize', value: event.target.value});
   };
 
   return (
@@ -96,7 +93,8 @@ export default function WheelSizeExpansionPanel(props) {
       <ExpansionPanelDetails className={classes.list}>
         {loadingData ? <p>loading data...</p> :
         <FormControl component="fieldset">
-          <RadioGroup aria-label="wheelSize" name="wheelSize" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="wheelSize" name="wheelSize" onChange={handleRadioChange} defaultValue='Any'>
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             {wheelSizeList.map((wheelSizeName, index) => {return (
               <FormControlLabel value={wheelSizeName} control={<Radio />} label={wheelSizeName} key={wheelSizeName} />
             )})}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import CenterContent from './CenterContent';
@@ -42,12 +42,13 @@ function App() {
   }
 
     return (
-      <div className="App">
+      <div className="App" key="appdiv">
         {displayCheckoutPage ? 
         <Checkout />
         :
-        <React.Fragment>
+        <Fragment key="headerfragment">
           <Header 
+            key="header"
             onDisplayBikes={setDisplayBikes} 
             isLoggedIn={isLoggedIn} 
             onLogin={setLoggedIn} 
@@ -57,7 +58,7 @@ function App() {
           />
           <CenterContent bikesToDisplay={displayedBikes} onDisplayBikes={setDisplayBikes} />
           <Footer />
-        </React.Fragment>
+        </Fragment>
         }
       </div>
     );

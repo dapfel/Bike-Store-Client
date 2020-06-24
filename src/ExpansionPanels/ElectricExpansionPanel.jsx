@@ -63,8 +63,9 @@ export default function ElectricExpansionPanel(props) {
   const [checkedState, setCheckedState] = useState(true);
   
   const handleCheckboxChange = (event) => {
-    setCheckedState(!checkedState);
-    props.onSubmitFilter({electric: checkedState});
+    let newState = !checkedState;
+    setCheckedState(newState);
+    props.onSubmitFilter({spec: 'electric', value: newState});
   };
 
   return (

@@ -78,18 +78,34 @@ export default function PriceExpansionPanel(props) {
     setExpanded(newExpanded ? panel : false);
   };
 
-  function handlePriceRangeChange(event) {
-    if (event.target.name === "minPrice") {
-      setPriceRange({...priceRange, min: event.target.value})
-    }
-    else {
-      setPriceRange({...priceRange, max: event.target.value})
+  function handlePriceRangeChange(event) { 
+    if (event.target.value) {
+      if (event.target.name === "minPrice") {
+        setPriceRange({...priceRange, min: parseInt(event.target.value)})
+      }
+      else {
+        setPriceRange({...priceRange, max: parseInt(event.target.value)})
+      }
+    } else {
+      if (event.target.name === "minPrice") {
+        setPriceRange({...priceRange, min: ''})
+      }
+      else {
+        setPriceRange({...priceRange, max: ''})
+      }
     }
   }
 
   function handlePriceRangeSubmit(event) {
     event.preventDefault();
-    props.onSubmitFilter({priceRange: priceRange});
+    const priceR = {...priceRange}
+    if (priceR.min === '') {
+      priceR.min = 0;
+    }
+    if (priceR.max === '') {
+      priceR.max = 0;
+    }
+    props.onSubmitFilter({spec: 'priceRange', value: priceR});
   }
 
   return (
@@ -101,7 +117,7 @@ export default function PriceExpansionPanel(props) {
         <form noValidate autoComplete="off" onSubmit={handlePriceRangeSubmit}>
           <TextField className={classes.textField} name="minPrice" label="Min Price ($)" variant="outlined" value={priceRange.min} onChange={handlePriceRangeChange} />
           <TextField className={classes.textField} name="maxPrice" label="Max Price ($)" variant="outlined" value={priceRange.max} onChange={handlePriceRangeChange} />
-          <Button className={classes.button} variant="contained" color="secondary">
+          <Button type="submit" className={classes.button} variant="contained" color="secondary">
             Filter
           </Button>
         </form>

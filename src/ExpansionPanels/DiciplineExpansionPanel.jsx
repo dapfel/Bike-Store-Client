@@ -65,7 +65,6 @@ export default function DiciplineExpansionPanel(props) {
   
   const [expanded, setExpanded] = useState(false);
   const [diciplineList, setDiciplineList] = useState([]);
-  const [radioState, setRadioState] = useState();
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function DiciplineExpansionPanel(props) {
     .then((res) => res.json())
     .then((data) => {
       setDiciplineList(data.specNameList);
-      setRadioState(diciplineList.map((diciplineName, index) => {return ({index: index.toString(), checked: false})}));
       setLoadingData(false);
     });
   },[]);
@@ -83,8 +81,7 @@ export default function DiciplineExpansionPanel(props) {
   };
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({dicipline: radioState});
+    props.onSubmitFilter({spec: 'dicipline', value: event.target.value});
   };
 
   return (
@@ -96,7 +93,8 @@ export default function DiciplineExpansionPanel(props) {
       <ExpansionPanelDetails className={classes.list}>
         {loadingData ? <p>loading data...</p> :
         <FormControl component="fieldset">
-          <RadioGroup aria-label="dicipline" name="dicipline" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="dicipline" name="dicipline" onChange={handleRadioChange}defaultValue='Any'>
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             {diciplineList.map((diciplineName, index) => {return (
               <FormControlLabel value={diciplineName} control={<Radio />} label={diciplineName} key={diciplineName} />
             )})}

@@ -65,7 +65,6 @@ export default function MaterialExpansionPanel(props) {
   
   const [expanded, setExpanded] = useState(false);
   const [materialList, setMaterialList] = useState([]);
-  const [radioState, setRadioState] = useState();
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function MaterialExpansionPanel(props) {
     .then((res) => res.json())
     .then((data) => {
       setMaterialList(data.specNameList);
-      setRadioState(materialList.map((materialName, index) => {return ({index: index.toString(), checked: false})}));
       setLoadingData(false);
     });
   },[]);
@@ -83,8 +81,7 @@ export default function MaterialExpansionPanel(props) {
   };
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({material: radioState});
+    props.onSubmitFilter({spec: 'material', value: event.target.value});
   };
 
   return (
@@ -96,7 +93,8 @@ export default function MaterialExpansionPanel(props) {
       <ExpansionPanelDetails className={classes.list}>
         {loadingData ? <p>loading data...</p> :
         <FormControl component="fieldset">
-          <RadioGroup aria-label="material" name="material" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="material" name="material" onChange={handleRadioChange} defaultValue='Any'>
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             {materialList.map((materialName, index) => {return (
               <FormControlLabel value={materialName} control={<Radio />} label={materialName} key={materialName} />
             )})}

@@ -61,12 +61,9 @@ export default function GenderExpansionPanel(props) {
   const handlePanelChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-
-  const [radioState, setRadioState] = useState();
   
   const handleRadioChange = (event) => {
-    setRadioState(event.target.value);
-    props.onSubmitFilter({gender: radioState});
+    props.onSubmitFilter({spec: 'gender', value: event.target.value});
   };
 
   return (
@@ -76,7 +73,8 @@ export default function GenderExpansionPanel(props) {
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
         <FormControl component="fieldset">
-          <RadioGroup aria-label="gender" name="gender" value={radioState} onChange={handleRadioChange}>
+          <RadioGroup aria-label="gender" name="gender" onChange={handleRadioChange} defaultValue='Any'>
+            <FormControlLabel value='Any' control={<Radio />} label='Any' key='Any' />
             <FormControlLabel value='Kids' control={<Radio />} label='Kids' key='Kids' />
             <FormControlLabel value='Mens' control={<Radio />} label='Mens' key='Mens' />
             <FormControlLabel value='Womens' control={<Radio />} label='Womens' key='Womens' />
