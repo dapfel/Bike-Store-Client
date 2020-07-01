@@ -75,6 +75,7 @@ function getStepContent(step, props, myProps) {
   switch (step) {
     case 0:
       return  <AddressForm
+                isLoggedIn={props.isLoggedIn} 
                 shippingAddress={myProps.shippingAddress}
                 onSetShippingAddress={myProps.onSetShippingAddress}
                 useShippingAddress={myProps.useShippingAddress}
@@ -116,7 +117,7 @@ function getStepContent(step, props, myProps) {
 
 export default function Checkout(props) {
   const classes = useStyles();
-
+  
   const [activeStep, setActiveStep] = React.useState(0);
   const [fetchInProgress, setFetchInProgress] = React.useState(false);
 
@@ -125,7 +126,7 @@ export default function Checkout(props) {
   const [useSavedCreditCard, setUseSavedCreditCard] = React.useState(false);
   const [orderNumber, setOrderNumber] = React.useState();
 
-  let initAddress = {firstName: '', lastName: '', address1: '', address2: '', city: '', state: '', zip: '', country: ''};
+  let initAddress = {firstName: '', lastName: '', address1: '', address2: '', email: '', city: '', state: '', zip: '', country: ''};
   let initCreditCard = {name: '', num: '', exp: '', cvv: ''};
   const [shippingAddress, setShippingAddress] = React.useState(initAddress);
   const [creditCard, setCreditCard] = React.useState(initCreditCard);
@@ -186,7 +187,7 @@ export default function Checkout(props) {
     handleNext: handleNext,
     handleBack: handleBack
    }
-
+   
   return (
     <React.Fragment>
       <CssBaseline />

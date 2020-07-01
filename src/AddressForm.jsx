@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
@@ -24,6 +26,7 @@ export default function AddressForm(props) {
   const [lastName, setLastName] = useState(props.shippingAddress.lastName);
   const [address1, setAddress1] = useState(props.shippingAddress.address1);
   const [address2, setAddress2] = useState(props.shippingAddress.address2);
+  const [email, setEmail] = useState(props.shippingAddress.email);
   const [city, setCity] = useState(props.shippingAddress.city);
   const [state, setState] = useState(props.shippingAddress.state);
   const [zip, setZip] = useState(props.shippingAddress.zip);
@@ -31,7 +34,7 @@ export default function AddressForm(props) {
   const [useShippingAddress, setUseShippingAddress] = useState(props.useShippingAddress);
 
   function onSubmit(event) {
-    props.onSetShippingAddress({firstName: firstName, lastName: lastName, address1: address1, address2: address2, city: city, state: state, zip: zip, country: country});
+    props.onSetShippingAddress({firstName: firstName, lastName: lastName, address1: address1, address2: address2, email: email, city: city, state: state, zip: zip, country: country});
     props.onUseShippingAddress(useShippingAddress)
     props.handleNext();
   }
@@ -85,17 +88,34 @@ export default function AddressForm(props) {
             value={address1}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={props.isLoggedIn ? 12 : 6}>
           <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-            onChange={(event) => setAddress2(event.target.value)}
-            value={address2}
+          id="address2"
+          name="address2"
+          label="Address line 2"
+          fullWidth
+          autoComplete="shipping address-line2"
+          onChange={(event) => setAddress2(event.target.value)}
+          value={address2}
           />
         </Grid>
+        {(!props.isLoggedIn) ?
+        <Grid item xs={12} sm={6}>
+        <TextField
+          required
+          id="email"
+          name="email"
+          label="Email Address"
+          fullWidth
+          autoComplete="email"
+          onChange={(event) => setEmail(event.target.value)}
+          value={email}
+          inputRef={register({ pattern: emailRegex })}
+          error={errors.email}
+          helperText={errors.email && "invalid email address"}
+          />
+        </Grid> 
+        : null}
         <Grid item xs={12} sm={6}>
           <TextField
             required

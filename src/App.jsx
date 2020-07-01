@@ -69,7 +69,8 @@ function App() {
     return (
       <div className="App">
         {displayCheckoutPage ? 
-        <Checkout cart={cart} 
+        <Checkout 
+          cart={cart} 
           creditCard={creditCard} 
           isLoggedIn={isLoggedIn}
           onOrderComplete={onOrderComplete}
