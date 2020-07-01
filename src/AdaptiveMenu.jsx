@@ -24,6 +24,7 @@ export default function AdaptiveMenu(props) {
      
     useEffect(() => {
     setCollapseMenu(width < 150 ? true : false);
+
     }, [width]);
      
     return (    
@@ -38,7 +39,7 @@ export default function AdaptiveMenu(props) {
         />
       :
         <Fragment>
-           <CartDialog cart={props.cart} onCheckout={props.onCheckout}/>
+           <CartDialog cart={props.cart} onUpdateCart={props.onUpdateCart} onCheckout={props.onCheckout}/>
            {props.isLoggedIn ? 
              <LogoutButton onLogout={props.onLogout} /> 
            :

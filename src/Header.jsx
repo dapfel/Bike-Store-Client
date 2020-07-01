@@ -4,12 +4,12 @@ import MyAppBar from "./AppBar";
 function Header(props) {
   return (
     <MyAppBar 
-      key="myappbar"
       onDisplayBikes={props.onDisplayBikes} 
       isLoggedIn={props.isLoggedIn} 
       onLogin={props.onLogin} 
       onLogout={props.onLogout}
       onCheckout={props.onCheckout}
+      onUpdateCart={props.onUpdateCart}
       cart={props.cart}
     />
   );

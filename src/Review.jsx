@@ -3,23 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
-
-const products = [
-  { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-  { name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-  { name: 'Product 3', desc: 'Something else', price: '$6.51' },
-  { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -31,10 +17,25 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginTop: theme.spacing(2),
   },
+  button: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+  }
 }));
 
-export default function Review() {
+export default function Review(props) {
   const classes = useStyles();
+
+  const addresses = [props.shippingAddress.address1 + " " + props.shippingAddress.address2,
+                   props.shippingAddress.city,
+                   props.shippingAddress.state,
+                   props.shippingAddress.zip,
+                   props.shippingAddress.country];
+const payments = [
+  { name: 'Card holder', detail: props.creditCard.name },
+  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-' + props.creditCard.num.substring(12,16) },
+  { name: 'Expiry date', detail: props.creditCard.exp },
+];
 
   return (
     <React.Fragment>
@@ -42,16 +43,16 @@ export default function Review() {
         Order summary
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
-          <ListItem className={classes.listItem} key={product.name}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+        {props.cart.map((product, index) => (
+          <ListItem className={classes.listItem} key={index}>
+            <ListItemText primary={product.name} />
+            <Typography variant="body2">{"$" + product.price}</Typography>
           </ListItem>
         ))}
         <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" className={classes.total}>
-            $34.06
+            {"$" + totalPrice(props.cart)}
           </Typography>
         </ListItem>
       </List>
@@ -60,7 +61,9 @@ export default function Review() {
           <Typography variant="h6" gutterBottom className={classes.title}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
+          <Typography gutterBottom>
+            {props.shippingAddress.firstName + " " +props.shippingAddress.lastName }
+          </Typography>
           <Typography gutterBottom>{addresses.join(', ')}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
@@ -81,6 +84,28 @@ export default function Review() {
           </Grid>
         </Grid>
       </Grid>
+      <div className={classes.buttons}>
+        {props.activeStep !== 0 && (
+          <Button onClick={props.handleBack} className={classes.button}>
+            Back
+          </Button>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={props.handleNext}
+          className={classes.button}
+        >
+          Place Order
+        </Button>
+      </div>
     </React.Fragment>
   );
+}
+
+function totalPrice(cart) {
+  let total = 0;
+  cart.forEach((product) => {total += product.price});
+  return total;
 }

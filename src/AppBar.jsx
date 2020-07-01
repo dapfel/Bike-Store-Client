@@ -86,18 +86,17 @@ export default function MyAppBar(props) {
   }
 
   return (
-    <div className={classes.root} key="appbardiv">
-    <AppBar position="static" key="appbar">
-      <Toolbar className={classes.toolbar} key="toolbar">
+    <div className={classes.root}>
+    <AppBar position="static">
+      <Toolbar className={classes.toolbar}>
         <img src="images/logo.png" alt="logo" className={classes.logo} />
-        <div className={classes.search} key='searchdiv'>
+        <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon />
           </div>
-          <form onSubmit={handleSearchInputSubmit} key="searchForm">
+          <form onSubmit={handleSearchInputSubmit}>
           <InputBase
             key="searchInput"
-            id="searchInput"
             placeholder="Search…"
             classes={{
               root: classes.inputRoot,
@@ -111,6 +110,7 @@ export default function MyAppBar(props) {
         </div>
         <AdaptiveMenu
           isLoggedIn={props.isLoggedIn}
+          onUpdateCart={props.onUpdateCart}
           cart={props.cart} 
           onCheckout={props.onCheckout} 
           onLogout={props.onLogout} 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -10,6 +10,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function Copyright() {
   return (
@@ -27,7 +31,7 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     minHeight: '300px',
-    minWidth: '250px',
+    minWidth: '350px',
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
@@ -35,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cartIcon: {
     padding: theme.spacing(2, 2),
+  },
+  list: {
+    backgroundColor: theme.palette.background.paper,
   },
   listItem: {
     padding: theme.spacing(1, 0),
@@ -55,6 +62,10 @@ export default function CartPage(props) {
     props.onCheckout();
   }
 
+  function handleRemoveItemClick(index) {
+    props.onUpdateCart(index);
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -66,21 +77,21 @@ export default function CartPage(props) {
           Shopping Cart
         </Typography>
         {(props.cart.length !== 0) ?
-        <React.Fragment>
-          <List disablePadding>
-            {props.cart.map((product) => 
-              <ListItem className={classes.listItem} key={product.name}>
-                <ListItemText primary={product.name} secondary={product.desc} />
-                <Typography variant="body2">{product.price}</Typography>
+        <Fragment>
+          <div className={classes.list}>
+            <List>
+            {props.cart.map((product, index) => 
+              <ListItem className={classes.listItem} key={index}>
+                <ListItemAvatar>
+                  <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveItemClick(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemAvatar>
+                <ListItemText primary={product.name} secondary={"$" + product.price} />
               </ListItem>
             )}
-            <ListItem className={classes.listItem}>
-              <ListItemText primary="Total" />
-              <Typography variant="subtitle1" className={classes.total}>
-                $34.06
-              </Typography>
-            </ListItem>
-          </List>
+            </List>
+          </div>
           <Button
             variant="contained"
             color="primary"
@@ -89,7 +100,7 @@ export default function CartPage(props) {
           >
             Checkout
           </Button> 
-        </React.Fragment>
+        </Fragment>
         :
         <Typography variant="subtitle1">
         Your cart is empty.

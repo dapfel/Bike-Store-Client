@@ -29,11 +29,11 @@ export default function CartDialog(props) {
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen} color="secondary" className={classes.button}>
-        <MyShoppingCartIcon /> 
+        <MyShoppingCartIcon cart={props.cart}/> 
         CART
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <CartPage cart={props.cart} onCheckout={props.onCheckout} onClose={handleClose} />
+        <CartPage cart={props.cart} onUpdateCart={props.onUpdateCart} onCheckout={props.onCheckout} onClose={handleClose} />
       </Dialog>
     </div>
   );

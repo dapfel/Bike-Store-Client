@@ -19,7 +19,7 @@ export default function CenterContent(props) {
   return (
     <div className={classes.root}>
       <FilterOptionsBar onDisplayBikes={props.onDisplayBikes} />
-      <BikesGrid bikesToDisplay={props.bikesToDisplay} />
+      <BikesGrid bikesToDisplay={props.bikesToDisplay} onAddToCart={props.onAddToCart} />
     </div>
   );
 }

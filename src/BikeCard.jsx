@@ -59,7 +59,7 @@ export default function BikeCard(props) {
       </CardActionArea>  
     </Card>
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <BikePage bike={bikeInfo} onClose={handleClose} />
+      <BikePage bikeInfo={bikeInfo} onClose={handleClose} onAddToCart={props.onAddToCart} />
     </Dialog>
     </Fragment>
   );

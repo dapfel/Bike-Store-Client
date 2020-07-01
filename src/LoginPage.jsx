@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -61,7 +60,7 @@ export default function Login(props) {
     });
   }
 
-  function handleSubmit(event) {
+  function onSubmit(event) {
     event.preventDefault();
     const {username, password} = loginData;
     
@@ -70,11 +69,10 @@ export default function Login(props) {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({username, password})
     })
-    .then(res => {
-        if (res.status === 200) {
-          const userData = res.body;
-          props.onLogin(userData);
-          props.onClose();  
+    .then((res) => res.json())
+    .then((data) => {
+        if (data) {
+          props.onLogin(data);
         }
         else {
           props.onClose();  
@@ -92,7 +90,7 @@ export default function Login(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit} >
+        <form className={classes.form} onSubmit={onSubmit} >
           <TextField
             variant="outlined"
             margin="normal"

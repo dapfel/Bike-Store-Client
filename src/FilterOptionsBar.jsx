@@ -28,7 +28,7 @@ export default function FilterOptionsBar(props) {
     let queryParams = "";
     filter.forEach((filterOption) => {
       if (filterOption.spec === "priceRange") {
-        queryParams += "priceMin=" + filterOption.value.min + "&" + "priceMax=" + filterOption.value.max + "&";
+        queryParams += "priceMin=" + filterOption.value.min + "&priceMax=" + filterOption.value.max + "&";
       } else {
         if (filterOption.value !== 'Any') {
           queryParams += filterOption.spec + "=" + filterOption.value + "&"

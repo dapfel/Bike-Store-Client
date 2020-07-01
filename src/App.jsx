@@ -41,22 +41,51 @@ function App() {
     setDisplayCheckoutPage(true);
   }
 
+  const onUpdateCart = (index) => {
+    if (isLoggedIn) {
+      fetch('/cartItems/' + cart[index]._id, {
+        method: 'DELETE',
+      })
+      .then((res) => res.json());
+    }
+    setCart([...cart.slice(0, index), ...cart.slice(index + 1)]);
+  }
+
+  const onAddToCart = (newBike) => {
+    if (isLoggedIn) {
+      fetch('/cartItems/' + newBike._id, {
+        method: 'POST',
+      })
+      .then((res) => res.json());
+    }
+    setCart([...cart, newBike]);
+  }
+
+  const onOrderComplete = () => {
+    setCart([]);
+    setDisplayCheckoutPage(false);
+  }
+
     return (
-      <div className="App" key="appdiv">
+      <div className="App">
         {displayCheckoutPage ? 
-        <Checkout />
+        <Checkout cart={cart} 
+          creditCard={creditCard} 
+          isLoggedIn={isLoggedIn}
+          onOrderComplete={onOrderComplete}
+        />
         :
-        <Fragment key="headerfragment">
+        <Fragment>
           <Header 
-            key="header"
             onDisplayBikes={setDisplayBikes} 
             isLoggedIn={isLoggedIn} 
             onLogin={setLoggedIn} 
             onLogout={setLoggedOut}
             onCheckout={onCheckout}
+            onUpdateCart={onUpdateCart}
             cart={cart}
           />
-          <CenterContent bikesToDisplay={displayedBikes} onDisplayBikes={setDisplayBikes} />
+          <CenterContent bikesToDisplay={displayedBikes} onDisplayBikes={setDisplayBikes} onAddToCart={onAddToCart} />
           <Footer />
         </Fragment>
         }

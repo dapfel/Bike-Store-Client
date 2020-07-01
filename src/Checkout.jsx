@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
@@ -62,34 +63,129 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  progress: {
+    textAlign: 'center',
+    marginTop: theme.spacing(8)
+  }
 }));
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-function getStepContent(step) {
+function getStepContent(step, props, myProps) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return  <AddressForm
+                shippingAddress={myProps.shippingAddress}
+                onSetShippingAddress={myProps.onSetShippingAddress}
+                useShippingAddress={myProps.useShippingAddress}
+                onUseShippingAddress={myProps.onUseShippingAddress}
+                activeStep={myProps.activeStep}
+                handleNext={myProps.handleNext}
+                handleBack={myProps.handleBack}
+              />;
     case 1:
-      return <PaymentForm />;
+      return  <PaymentForm 
+                creditCard={myProps.creditCard}
+                billingAddress={myProps.billingAddress}
+                isLoggedIn={props.isLoggedIn} 
+                savedCreditCard={props.creditCard}
+                useSavedCreditCard={myProps.useSavedCreditCard}
+                onUseSavedCreditCard={myProps.onUseSavedCreditCard}
+                useShippingAddress={myProps.useShippingAddress}
+                saveCreditCard={myProps.saveCreditCard}
+                onSaveCreditCard={myProps.onSaveCreditCard}
+                onSetCreditCard={myProps.onSetCreditCard}
+                onSetBillingAddress={myProps.onSetBillingAddress}
+                activeStep={myProps.activeStep}
+                handleNext={myProps.handleNext}
+                handleBack={myProps.handleBack}
+              />;
     case 2:
-      return <Review />;
+      return <Review 
+                cart={props.cart} 
+                shippingAddress={myProps.shippingAddress}  
+                creditCard={myProps.creditCard}
+                activeStep={myProps.activeStep}
+                handleNext={myProps.handleNext}
+                handleBack={myProps.handleBack}
+              />;
     default:
       throw new Error('Unknown step');
   }
 }
 
-export default function Checkout() {
+export default function Checkout(props) {
   const classes = useStyles();
+
   const [activeStep, setActiveStep] = React.useState(0);
+  const [fetchInProgress, setFetchInProgress] = React.useState(false);
+
+  const [useShippingAddress, setUseShippingAddress] = React.useState(false);
+  const [saveCreditCard, setSaveCreditCard] = React.useState(false);
+  const [useSavedCreditCard, setUseSavedCreditCard] = React.useState(false);
+  const [orderNumber, setOrderNumber] = React.useState();
+
+  let initAddress = {firstName: '', lastName: '', address1: '', address2: '', city: '', state: '', zip: '', country: ''};
+  let initCreditCard = {name: '', num: '', exp: '', cvv: ''};
+  const [shippingAddress, setShippingAddress] = React.useState(initAddress);
+  const [creditCard, setCreditCard] = React.useState(initCreditCard);
+  const [billingAddress, setBillingAddress] = React.useState(initAddress);
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if (activeStep === steps.length - 1) {
+      processOrder();
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  function processOrder() {
+    const order = {
+      productIds: props.cart.map((bike) => {return bike._id}), 
+      shippingAddress: shippingAddress,
+      billingAddress: (useShippingAddress ? shippingAddress : billingAddress), 
+      creditCard: creditCard, 
+      saveCreditCard: saveCreditCard
+    };
+    setFetchInProgress(true);
+    fetch('/processOrder', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(order)
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        setFetchInProgress(false);
+        if (data.num) {
+          setOrderNumber(data.num);
+          setActiveStep(activeStep + 1);
+        } else {
+          alert("Failed to process order");
+        }
+    });
+  }
+
+  const myProps = {
+    useShippingAddress: useShippingAddress,
+    onUseShippingAddress: setUseShippingAddress,
+    onSetShippingAddress: setShippingAddress,
+    onSetCreditCard: setCreditCard,
+    onSetBillingAddress: setBillingAddress,
+    saveCreditCard: saveCreditCard,
+    onSaveCreditCard: setSaveCreditCard,
+    useSavedCreditCard: useSavedCreditCard,
+    onUseSavedCreditCard: setUseSavedCreditCard,
+    billingAddress: billingAddress,
+    shippingAddress: shippingAddress,
+    creditCard: creditCard,
+    activeStep: activeStep,
+    handleNext: handleNext,
+    handleBack: handleBack
+   }
 
   return (
     <React.Fragment>
@@ -97,10 +193,20 @@ export default function Checkout() {
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Company name
+            The Bike Shack
           </Typography>
         </Toolbar>
       </AppBar>
+      {fetchInProgress ?
+      <div className={classes.progress}>
+        <div>
+          <CircularProgress />
+        </div>
+        <Typography variant="h5" gutterBottom>
+          Order processing. Do not refresh.
+        </Typography>
+      </div>
+      :
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
@@ -120,34 +226,30 @@ export default function Checkout() {
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
+                  Your order number is {"#" + orderNumber}. We have emailed your order confirmation, and will
                   send you an update when your order has shipped.
                 </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={props.onOrderComplete}
+                    className={classes.button}
+                  >
+                    {'Return to Home'}
+                  </Button>
               </React.Fragment>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                  </Button>
-                </div>
+                {getStepContent(activeStep, 
+                  props, 
+                  myProps)}
               </React.Fragment>
             )}
           </React.Fragment>
         </Paper>
         <Copyright />
       </main>
+      }  
     </React.Fragment>
   );
 }

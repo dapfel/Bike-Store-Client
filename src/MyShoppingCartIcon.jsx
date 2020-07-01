@@ -21,12 +21,12 @@ const StyledBadge = withStyles((theme) => ({
 export default function MyShoppingCartIcon(props) {
   const classes = useStyles();
 
-  const [cartBadgeContent, setCartBadgeContent] = useState(0);
+  const [cartBadgeContent] = useState(props.cart.length);
 
   return (
     <Box className={classes.root}>
       <Icon aria-label="cart">
-        <StyledBadge badgeContent={4} color="secondary">
+        <StyledBadge badgeContent={cartBadgeContent} color="secondary">
           <ShoppingCartIcon />
         </StyledBadge>
       </Icon>
