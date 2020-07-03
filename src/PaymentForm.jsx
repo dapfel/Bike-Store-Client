@@ -35,7 +35,7 @@ export default function PaymentForm(props) {
   const [saveCreditCard, setSaveCreditCard] = useState(props.saveCreditCard);
 
   let savedCreditCardInfo = false;
-  if (props.savedCreditCard) {
+  if (props.savedCreditCard && props.savedCreditCard.num) {
     savedCreditCardInfo = props.savedCreditCard.num.substring(12,16) + " " + props.savedCreditCard.exp;
   }
 
