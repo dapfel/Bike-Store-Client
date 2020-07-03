@@ -12,11 +12,13 @@ function App() {
   const [cart, setCart] = useState([]);
   const [creditCard, setCreditCard] = useState({});
   const [displayCheckoutPage, setDisplayCheckoutPage] = useState(false);
+  const [fetchInProgress, setFetchInProgress] = useState(true);
 
   useEffect(() => {
     fetch('/bikes/featured')
     .then((res) => res.json())
     .then((data) => {
+      setFetchInProgress(false);
       setDisplayedBikes(data.bikeData);
     });
   }, []);
@@ -86,7 +88,11 @@ function App() {
             onUpdateCart={onUpdateCart}
             cart={cart}
           />
-          <CenterContent bikesToDisplay={displayedBikes} onDisplayBikes={setDisplayBikes} onAddToCart={onAddToCart} />
+          <CenterContent 
+            loadingBikes={fetchInProgress}
+            bikesToDisplay={displayedBikes} 
+            onDisplayBikes={setDisplayBikes} 
+            onAddToCart={onAddToCart} />
           <Footer />
         </Fragment>
         }

@@ -14,10 +14,10 @@ export default function SimpleBreadcrumbs() {
   return (
     <Breadcrumbs className="breadcrumbs" aria-label="breadcrumb">
       <Link color="textSecondary" href="/" onClick={handleClick}>
-        Material-UI
+        The Bike Shack
       </Link>
-      <Link color="textSecondary" href="/getting-started/installation/" onClick={handleClick}>
-        Core
+      <Link color="textSecondary" href="/" onClick={handleClick}>
+        Terms
       </Link>
       <Typography color="textPrimary">Copyright © {year}</Typography>
     </Breadcrumbs>
