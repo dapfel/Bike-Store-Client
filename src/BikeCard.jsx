@@ -11,7 +11,7 @@ import BikePage from './BikePage';
 const useStyles = makeStyles({
   root: {
     maxWidth: 500,
-    minHeight:300,
+    height:300,
     marginBottom: '30px',
     textAlign: 'center'
   },

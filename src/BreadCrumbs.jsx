@@ -5,7 +5,6 @@ import Link from '@material-ui/core/Link';
 
 function handleClick(event) {
   event.preventDefault();
-  console.info('You clicked a breadcrumb.');
 }
 
 export default function SimpleBreadcrumbs() {
@@ -13,10 +12,10 @@ export default function SimpleBreadcrumbs() {
 
   return (
     <Breadcrumbs className="breadcrumbs" aria-label="breadcrumb">
-      <Link color="textSecondary" href="/" onClick={handleClick}>
+      <Link color="textSecondary" href="/" >
         The Bike Shack
       </Link>
-      <Link color="textSecondary" href="/" onClick={handleClick}>
+      <Link color="textSecondary" href="/" >
         Terms
       </Link>
       <Typography color="textPrimary">Copyright © {year}</Typography>

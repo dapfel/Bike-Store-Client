@@ -9,7 +9,6 @@ function Footer() {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-    position: 'fixed',
     bottom: '0px'
   };
 
