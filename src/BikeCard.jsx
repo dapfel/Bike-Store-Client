@@ -39,7 +39,7 @@ export default function BikeCard(props) {
 
   return (
     <Fragment>
-    <Card className={classes.root} onClick={handleCardClick}>
+    <Card className={classes.root} variant="outlined" elevation={0} onClick={handleCardClick}>
       <CardActionArea className={classes.actionArea}>
         <CardMedia
           component="img"
