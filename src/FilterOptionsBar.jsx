@@ -12,7 +12,7 @@ import BrandExpansionPanel from './ExpansionPanels/BrandExpansionPanel';
 const useStyles = makeStyles((theme) => ({
   root: {
     marginRight: '3px',
-    maxWidth: '350px'
+    width: '250px'
   }
 }));
 
