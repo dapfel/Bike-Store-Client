@@ -9,10 +9,14 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'flex-start',
       maxWidth: '1300px',
       margin: '30px auto',
+      marginBottom: 0,
       display: 'flex'
     },
     progress: {
       margin: 'auto'
+    },
+    grid: {
+      marginBottom: '100px'
     }
   }));
 
@@ -28,10 +32,12 @@ export default function CenterContent(props) {
         <CircularProgress />
       </div>
       :
+      <div className={classes.grid}>
       <BikesGrid 
         bikesToDisplay={props.bikesToDisplay} 
         onAddToCart={props.onAddToCart} 
       />
+      </div>
       }
     </div>
   );

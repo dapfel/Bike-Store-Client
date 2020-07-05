@@ -1,11 +1,19 @@
 import React, {useState, useEffect, Fragment} from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import Header from "./Header";
 import Footer from "./Footer";
 import CenterContent from './CenterContent';
 import Checkout from "./Checkout"
 
+const useStyles = makeStyles((theme) => ({
+  page: {
+    position: 'relative',
+    minHeight: '100vh'
+  },
+}));
 
 function App() {
+  const classes = useStyles();
 
   const [displayedBikes, setDisplayedBikes] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -70,6 +78,7 @@ function App() {
 
     return (
       <div className="App">
+        <div className={classes.page}>
         {displayCheckoutPage ? 
         <Checkout 
           cart={cart} 
@@ -96,6 +105,7 @@ function App() {
           <Footer />
         </Fragment>
         }
+        </div>
       </div>
     );
 }
