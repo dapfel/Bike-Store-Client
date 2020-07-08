@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
       margin: 'auto'
     },
     grid: {
+      marginLeft: '253px',
       marginBottom: '100px'
     }
   }));
